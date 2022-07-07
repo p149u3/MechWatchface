@@ -471,7 +471,6 @@ try {
                     url: "pai_app_Screen",
                     native: true,
                   });
-                  sm.switch('main');
                 });
               screen2.createWidget(hmUI.widget.IMG, SCREEN2_TIMER_BACK)
                 .addEventListener(hmUI.event.CLICK_UP, function (e) {
@@ -479,7 +478,6 @@ try {
                     url: "CountdownAppScreen",
                     native: true,
                   });
-                  sm.switch('main');
                 });
               screen2.createWidget(hmUI.widget.IMG, SCREEN2_DIST_TOUCH)
                 .addEventListener(hmUI.event.CLICK_UP, function (e) {
@@ -487,7 +485,6 @@ try {
                     url: "SportListScreen",
                     native: true,
                   });
-                  sm.switch('main');
                 });
               screen2.createWidget(hmUI.widget.IMG, SCREEN2_FLASH_BACK)
                 .addEventListener(hmUI.event.CLICK_UP, function (e) {
@@ -495,13 +492,19 @@ try {
                     url: "FlashLightScreen",
                     native: true,
                   });
-                  sm.switch('main');
                 });
               screen2.createWidget(hmUI.widget.IMG, SCREEN2_BACK_BACK)
                 .addEventListener(hmUI.event.CLICK_UP, function (e) {
                   sm.switch('main');
                 });
               sm.switch('main');
+              hmUI.createWidget(hmUI.widget.WIDGET_DELEGATE, {
+                resume_call: (function () {
+                }),
+                pause_call: (function () {
+                  sm.switch('main');
+                }),
+              });
             },
             onInit() {
               console.log("index page.js on init invoke"),
