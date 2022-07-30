@@ -65,6 +65,37 @@ try {
         }
       };
     }
+    class ImperialDate {
+      widget1 = null;
+      widget2 = null;
+      time = null;
+      constructor(hmWidget1, hmWidget2) {
+        this.widget1 = hmWidget1;
+        this.widget2 = hmWidget2;
+        this.time = hmSensor.createSensor(hmSensor.id.TIME);
+      }
+      updateDate() {
+        let ts = this.time.utc;
+        let t = new Date(ts);
+        let y = t.getUTCFullYear() % 1000;
+        let m = Math.floor(t.getUTCFullYear() / 1000 + 1);
+        let f = this.getYearFraction(t);
+        this.widget1.setProperty(hmUI.prop.TEXT, "0" + this.pad(f, 3));
+        this.widget2.setProperty(hmUI.prop.TEXT, this.pad(y, 3) + "-" + m.toString());
+      }
+      getYearFraction(date) {
+        let start = new Date(date.getUTCFullYear(), 0, 1);
+        let end = new Date(date.getUTCFullYear() + 1, 0, 0);
+        let diff = (date - start);
+        let frac = Math.floor(((diff / (end - start)) * 1000));
+        return frac;
+      }
+      pad(num, size) {
+        num = num.toString();
+        while (num.length < size) num = "0" + num;
+        return num;
+      }
+    }
 
     try {
       (() => {
@@ -106,7 +137,7 @@ try {
         };
         const WEATHER_BACK = {
           x: 4,
-          y: 48,
+          y: 40,
           src: "images/icon/red.png",
           show_level: hmUI.show_level.ONLY_NORMAL
         };
@@ -117,7 +148,7 @@ try {
         };
         const PULSE_BACK = {
           x: 96,
-          y: 48,
+          y: 40,
           src: "images/icon/cog.png",
           show_level: hmUI.show_level.ONLY_NORMAL
         };
@@ -128,7 +159,7 @@ try {
         };
         const AM_BACK = {
           x: 6,
-          y: 235,
+          y: 242,
           src: "images/icon/am.png",
           show_level: hmUI.show_level.ONLY_NORMAL
 
@@ -139,26 +170,26 @@ try {
           alpha: 0
         };
         const BLUETOOTH_OFF = {
-          x: 111,
+          x: 101,
           y: 16,
           show_level: hmUI.show_level.ONLY_NORMAL,
           src: "images/status/bluetoothoff.png"
         };
         const BLUETOOTH_ON = {
-          x: 111,
+          x: 101,
           y: 16,
           show_level: hmUI.show_level.ONLY_NORMAL,
           src: "images/status/bluetoothon.png",
           type: hmUI.system_status.DISCONNECT
         };
         const DND_OFF = {
-          x: 55,
+          x: 65,
           y: 16,
           show_level: hmUI.show_level.ONLY_NORMAL,
           src: "images/status/disturboff.png"
         };
         const DND_ON = {
-          x: 55,
+          x: 65,
           y: 16,
           show_level: hmUI.show_level.ONLY_NORMAL,
           src: "images/status/disturbon.png",
@@ -184,7 +215,7 @@ try {
         };
         const TEMPERATURE = {
           x: -1,
-          y: 102,
+          y: 94,
           w: 100,
           type: hmUI.data_type.WEATHER_CURRENT,
           font_array: DATA_FONT,
@@ -198,7 +229,7 @@ try {
         };
         const PULSE = {
           x: 92,
-          y: 102,
+          y: 94,
           w: 100,
           type: hmUI.data_type.HEART,
           font_array: DATA_FONT,
@@ -208,7 +239,7 @@ try {
         };
         const STEPS = {
           x: 46,
-          y: 430,
+          y: 432,
           w: 100,
           type: hmUI.data_type.STEP,
           font_array: DATA_RED_FONT,
@@ -218,7 +249,7 @@ try {
         };
         let SEG_STEPS = {
           x: 6,
-          y: 235,
+          y: 242,
           image_array: segSteps,
           image_length: 16,
           type: hmUI.data_type.STEP,
@@ -226,7 +257,7 @@ try {
         }
         const WEATHER = {
           x: 29,
-          y: 55,
+          y: 47,
           image_array: weatherIcons,
           image_length: weatherIcons.length,
           type: hmUI.data_type.WEATHER_CURRENT,
@@ -260,12 +291,12 @@ try {
         let TIME_TEXT = {
           hour_zero: true,
           hour_startX: 8,
-          hour_startY: 170,
+          hour_startY: 157,
           hour_array: TIME_FONT,
           hour_align: hmUI.align.LEFT,
           minute_zero: true,
           minute_startX: 112,
-          minute_startY: 170,
+          minute_startY: 157,
           minute_array: TIME_FONT,
           minute_align: hmUI.align.LEFT,
           show_level: hmUI.show_level.ONLY_NORMAL | hmUI.show_level.ONLY_AOD
@@ -283,7 +314,7 @@ try {
         };
         const AM_24 = {
           x: 82,
-          y: 172,
+          y: 159,
           week_en: voidAMPM,
           week_sc: voidAMPM,
           week_tc: voidAMPM,
@@ -291,7 +322,7 @@ try {
         };
         const PM_24 = {
           x: 82,
-          y: 205,
+          y: 192,
           week_en: voidAMPM,
           week_sc: voidAMPM,
           week_tc: voidAMPM,
@@ -299,7 +330,7 @@ try {
         };
         const WEEKDAY = {
           x: 32,
-          y: 144,
+          y: 134,
           week_en: weekdays,
           week_sc: weekdays,
           week_tc: weekdays,
@@ -307,7 +338,7 @@ try {
         };
         let DATE = {
           month_startX: 88,
-          month_startY: 144,
+          month_startY: 134,
           month_zero: true,
           month_en_array: DATA_RED_FONT,
           month_sc_array: DATA_RED_FONT,
@@ -322,6 +353,25 @@ try {
           day_en_array: DATA_RED_FONT,
           day_sc_array: DATA_RED_FONT,
           day_tc_array: DATA_RED_FONT,
+          show_level: hmUI.show_level.ONLY_NORMAL | hmUI.show_level.ONLY_AOD
+        };
+        let IMP_DATE = {
+          x: 27,
+          y: 216,
+          w: 96,
+          h: 21,
+          font_array: DATA_RED_FONT,
+          text: "0123",
+          show_level: hmUI.show_level.ONLY_NORMAL | hmUI.show_level.ONLY_AOD
+        };
+        let IMP_DATE_2 = {
+          x: 85,
+          y: 216,
+          w: 96,
+          h: 21,
+          font_array: DATA_RED_FONT,
+          text: "456.3",
+          negative_image: "images/data_red/m.png",
           show_level: hmUI.show_level.ONLY_NORMAL | hmUI.show_level.ONLY_AOD
         };
         let SCREEN2_BG = {
@@ -438,7 +488,9 @@ try {
               screen1.createWidget(hmUI.widget.ARC_PROGRESS, BATTERY_ARC_BG);
               screen1.createWidget(hmUI.widget.ARC_PROGRESS, BATTERY_ARC_PROGRESS);
               screen1.createWidget(hmUI.widget.IMG_STATUS, BLUETOOTH_ON);
-              screen1.createWidget(hmUI.widget.IMG_STATUS, DND_ON);
+              screen1.createWidget(hmUI.widget.IMG_STATUS, DND_ON);  
+              let impDateWidget = screen1.createWidget(hmUI.widget.TEXT_IMG, IMP_DATE);
+              let impDateWidget2 = screen1.createWidget(hmUI.widget.TEXT_IMG, IMP_DATE_2);
               screen1.createWidget(hmUI.widget.IMG, PULSE_TOUCH)
                 .addEventListener(hmUI.event.CLICK_UP, function (e) {
                   hmApp.startApp({
@@ -458,6 +510,8 @@ try {
                   sm.switch('menu');
                 });
 
+              let impd = new ImperialDate(impDateWidget, impDateWidget2);
+              impd.updateDate();
               let screen2 = sm.getScreen('menu');
               screen2.createWidget(hmUI.widget.FILL_RECT, SCREEN2_BG);
               screen2.createWidget(hmUI.widget.IMG, SCREEN2_PAI_BACK);
@@ -500,6 +554,7 @@ try {
               sm.switch('main');
               hmUI.createWidget(hmUI.widget.WIDGET_DELEGATE, {
                 resume_call: (function () {
+                  impd.updateDate();
                 }),
                 pause_call: (function () {
                   sm.switch('main');
